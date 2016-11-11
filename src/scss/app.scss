@@ -1,0 +1,17 @@
+$bootstrap-sass-asset-helper: true;
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+
+input[type="checkbox"] {
+  margin-right: 20px;
+}
+.list-group-item {
+  .btn-danger {
+    opacity: 0;
+    transition: .25s ease all;
+  }
+  &:hover {
+    .btn-danger {
+      opacity: 1;
+    }
+  }
+}
