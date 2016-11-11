@@ -1,2 +1,2 @@
-# webpack-scaffold
-My own scaffolding for webpack projects
+# React Todo Project with Node API and MongoDB
+**Work In Progress**
