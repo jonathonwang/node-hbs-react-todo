@@ -3,40 +3,14 @@
 import '../scss/app.scss';
 // =============================================================================
 
+// NPM Module Dependency Imports
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as Fetch from 'whatwg-fetch';
 
-export class TaskComponent extends React.Component<any, void> {
-  constructor(props) {
-    super();
-  }
-  render(): any {
-    const listItemClass: string = `list-group-item ${this.props.task.isComplete ? 'completed' : ''}`;
-    return (
-      <li className={listItemClass}>
-        <input type='checkbox' onChange={() => this.props.toggleComplete(this.props.task)} checked={this.props.task.isComplete}/>
-        {this.props.task.title}
-        <button onClick={() => this.props.deleteTask(this.props.task)} className='btn btn-danger btn-xs pull-right'>Delete</button>
-      </li>
-    );
-  }
-};
-
-export class InputForm extends React.Component<any, void> {
-  constructor(props) {
-    super();
-  }
-  render(): any {
-    return (
-      <li className='list-group-item'>
-        <form onSubmit={this.props.createTask}>
-          <input type='text' className='form-control' onChange={this.props.updateNewTaskTitle} value={this.props.newTask.title}/>
-        </form>
-      </li>
-    );
-  }
-}
+// React Components
+import TaskComponent from './TaskComponent';
+import InputForm from './InputForm';
 
 export class Main extends React.Component<any, any> {
   constructor() {

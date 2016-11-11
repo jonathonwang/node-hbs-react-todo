@@ -49,7 +49,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.Main = exports.InputForm = exports.TaskComponent = undefined;
+	exports.Main = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -63,6 +63,16 @@
 	
 	var ReactDOM = _interopRequireWildcard(_reactDom);
 	
+	var _TaskComponent = __webpack_require__(182);
+	
+	var _TaskComponent2 = _interopRequireDefault(_TaskComponent);
+	
+	var _InputForm = __webpack_require__(183);
+	
+	var _InputForm2 = _interopRequireDefault(_InputForm);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71,89 +81,42 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var TaskComponent = exports.TaskComponent = function (_React$Component) {
-	    _inherits(TaskComponent, _React$Component);
-	
-	    function TaskComponent(props) {
-	        _classCallCheck(this, TaskComponent);
-	
-	        return _possibleConstructorReturn(this, (TaskComponent.__proto__ || Object.getPrototypeOf(TaskComponent)).call(this));
-	    }
-	
-	    _createClass(TaskComponent, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-	
-	            var listItemClass = 'list-group-item ' + (this.props.task.isComplete ? 'completed' : '');
-	            return React.createElement("li", { className: listItemClass }, React.createElement("input", { type: 'checkbox', onChange: function onChange() {
-	                    return _this2.props.toggleComplete(_this2.props.task);
-	                }, checked: this.props.task.isComplete }), this.props.task.title, React.createElement("button", { onClick: function onClick() {
-	                    return _this2.props.deleteTask(_this2.props.task);
-	                }, className: 'btn btn-danger btn-xs pull-right' }, "Delete"));
-	        }
-	    }]);
-	
-	    return TaskComponent;
-	}(React.Component);
-	
-	;
-	
-	var InputForm = exports.InputForm = function (_React$Component2) {
-	    _inherits(InputForm, _React$Component2);
-	
-	    function InputForm(props) {
-	        _classCallCheck(this, InputForm);
-	
-	        return _possibleConstructorReturn(this, (InputForm.__proto__ || Object.getPrototypeOf(InputForm)).call(this));
-	    }
-	
-	    _createClass(InputForm, [{
-	        key: 'render',
-	        value: function render() {
-	            return React.createElement("li", { className: 'list-group-item' }, React.createElement("form", { onSubmit: this.props.createTask }, React.createElement("input", { type: 'text', className: 'form-control', onChange: this.props.updateNewTaskTitle, value: this.props.newTask.title })));
-	        }
-	    }]);
-	
-	    return InputForm;
-	}(React.Component);
-	
-	var Main = exports.Main = function (_React$Component3) {
-	    _inherits(Main, _React$Component3);
+	var Main = exports.Main = function (_React$Component) {
+	    _inherits(Main, _React$Component);
 	
 	    function Main() {
 	        _classCallCheck(this, Main);
 	
-	        var _this4 = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this));
+	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this));
 	
-	        _this4.state = {
+	        _this.state = {
 	            title: 'Todo',
 	            newTask: { title: '', isComplete: false },
 	            tasks: []
 	        };
-	        _this4.fetchTasks = _this4.fetchTasks.bind(_this4);
-	        _this4.toggleComplete = _this4.toggleComplete.bind(_this4);
-	        _this4.createTask = _this4.createTask.bind(_this4);
-	        _this4.updateNewTaskTitle = _this4.updateNewTaskTitle.bind(_this4);
-	        _this4.deleteTask = _this4.deleteTask.bind(_this4);
-	        return _this4;
+	        _this.fetchTasks = _this.fetchTasks.bind(_this);
+	        _this.toggleComplete = _this.toggleComplete.bind(_this);
+	        _this.createTask = _this.createTask.bind(_this);
+	        _this.updateNewTaskTitle = _this.updateNewTaskTitle.bind(_this);
+	        _this.deleteTask = _this.deleteTask.bind(_this);
+	        return _this;
 	    }
 	
 	    _createClass(Main, [{
 	        key: 'fetchTasks',
 	        value: function fetchTasks() {
-	            var _this5 = this;
+	            var _this2 = this;
 	
 	            fetch('/tasks').then(function (response) {
 	                return response.json();
 	            }).then(function (body) {
-	                _this5.setState({ tasks: body });
+	                _this2.setState({ tasks: body });
 	            });
 	        }
 	    }, {
 	        key: 'toggleComplete',
 	        value: function toggleComplete(task) {
-	            var _this6 = this;
+	            var _this3 = this;
 	
 	            var taskList = this.state.tasks;
 	            var taskIndex = taskList.findIndex(function (taskItem) {
@@ -166,34 +129,34 @@
 	                if (response.status !== 200) {
 	                    console.log(response);
 	                    stateTask.isComplete = !stateTask.isComplete;
-	                    _this6.setState({ tasks: taskList });
+	                    _this3.setState({ tasks: taskList });
 	                }
 	            });
 	        }
 	    }, {
 	        key: 'createTask',
 	        value: function createTask(event) {
-	            var _this7 = this;
+	            var _this4 = this;
 	
 	            event.preventDefault();
 	            var newTask = this.state.newTask;
 	            if (newTask.title.length > 0) {
 	                (function () {
 	                    var resetTask = { title: '', isComplete: false };
-	                    var tasks = _this7.state.tasks;
+	                    var tasks = _this4.state.tasks;
 	                    var newId = Math.floor(Math.random() * 10) + 2;
 	                    newTask._id = newId;
 	                    tasks.push(newTask);
-	                    _this7.setState({ newTask: resetTask, tasks: tasks });
+	                    _this4.setState({ newTask: resetTask, tasks: tasks });
 	                    var postBody = JSON.stringify({ title: newTask.title });
 	                    fetch('/task', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: postBody }).then(function (response) {
 	                        return response.json();
 	                    }).then(function (body) {
-	                        var taskIndex = _this7.state.tasks.findIndex(function (task) {
+	                        var taskIndex = _this4.state.tasks.findIndex(function (task) {
 	                            return task._id === newId;
 	                        });
 	                        tasks.splice(taskIndex, 1, body);
-	                        _this7.setState({ tasks: tasks });
+	                        _this4.setState({ tasks: tasks });
 	                    });
 	                })();
 	            }
@@ -219,12 +182,12 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this8 = this;
+	            var _this5 = this;
 	
 	            var taskList = this.state.tasks.map(function (task) {
-	                return React.createElement(TaskComponent, { task: task, key: task._id, toggleComplete: _this8.toggleComplete, deleteTask: _this8.deleteTask });
+	                return React.createElement(_TaskComponent2.default, { task: task, key: task._id, toggleComplete: _this5.toggleComplete, deleteTask: _this5.deleteTask });
 	            });
-	            return React.createElement("div", null, React.createElement("h1", { className: 'text-center' }, this.state.title), React.createElement("ul", { className: 'list-group' }, React.createElement(InputForm, { newTask: this.state.newTask, createTask: this.createTask, updateNewTaskTitle: this.updateNewTaskTitle }), taskList));
+	            return React.createElement("div", null, React.createElement("h1", { className: 'text-center' }, this.state.title), React.createElement("ul", { className: 'list-group' }, React.createElement(_InputForm2.default, { newTask: this.state.newTask, createTask: this.createTask, updateNewTaskTitle: this.updateNewTaskTitle }), taskList));
 	        }
 	    }]);
 	
@@ -22843,6 +22806,106 @@
 	
 	module.exports = ReactDOMNullInputValuePropHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.TaskComponent = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(5);
+	
+	var React = _interopRequireWildcard(_react);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TaskComponent = exports.TaskComponent = function (_React$Component) {
+	    _inherits(TaskComponent, _React$Component);
+	
+	    function TaskComponent(props) {
+	        _classCallCheck(this, TaskComponent);
+	
+	        return _possibleConstructorReturn(this, (TaskComponent.__proto__ || Object.getPrototypeOf(TaskComponent)).call(this));
+	    }
+	
+	    _createClass(TaskComponent, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            var listItemClass = 'list-group-item ' + (this.props.task.isComplete ? 'completed' : '');
+	            return React.createElement("li", { className: listItemClass }, React.createElement("input", { type: 'checkbox', onChange: function onChange() {
+	                    return _this2.props.toggleComplete(_this2.props.task);
+	                }, checked: this.props.task.isComplete }), this.props.task.title, React.createElement("button", { onClick: function onClick() {
+	                    return _this2.props.deleteTask(_this2.props.task);
+	                }, className: 'btn btn-danger btn-xs pull-right' }, "Delete"));
+	        }
+	    }]);
+	
+	    return TaskComponent;
+	}(React.Component);
+	
+	;
+	exports.default = TaskComponent;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.InputForm = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(5);
+	
+	var React = _interopRequireWildcard(_react);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var InputForm = exports.InputForm = function (_React$Component) {
+	    _inherits(InputForm, _React$Component);
+	
+	    function InputForm(props) {
+	        _classCallCheck(this, InputForm);
+	
+	        return _possibleConstructorReturn(this, (InputForm.__proto__ || Object.getPrototypeOf(InputForm)).call(this));
+	    }
+	
+	    _createClass(InputForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement("li", { className: 'list-group-item' }, React.createElement("form", { onSubmit: this.props.createTask }, React.createElement("input", { type: 'text', className: 'form-control', onChange: this.props.updateNewTaskTitle, value: this.props.newTask.title })));
+	        }
+	    }]);
+	
+	    return InputForm;
+	}(React.Component);
+	
+	exports.default = InputForm;
 
 /***/ }
 /******/ ]);
