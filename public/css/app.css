@@ -5817,6 +5817,9 @@ button.close {
 input[type="checkbox"] {
   margin-right: 20px; }
 
+.list-group-item.completed {
+  background-color: #eee; }
+
 .list-group-item .btn-danger {
   opacity: 0;
   transition: .25s ease all; }

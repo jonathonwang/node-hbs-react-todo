@@ -14,6 +14,7 @@
     "@types/react": "^0.14.47",
     "@types/react-dom": "^0.14.18",
     "@types/whatwg-fetch": "0.0.32",
+    "@types/whatwg-streams": "0.0.1",
     "body-parser": "~1.15.1",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
@@ -27,7 +28,8 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "serve-favicon": "~2.3.0",
-    "whatwg-fetch": "^1.0.0"
+    "whatwg-fetch": "^1.0.0",
+    "whatwg-streams": "^0.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
