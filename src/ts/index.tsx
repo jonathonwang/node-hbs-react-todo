@@ -12,7 +12,10 @@ import * as Fetch from 'whatwg-fetch';
 import TaskComponent from './TaskComponent';
 import InputForm from './InputForm';
 
-export class Main extends React.Component<any, any> {
+// Interface Imports
+import { IMainState, ITask } from './interfaces';
+
+export class Main extends React.Component<void, IMainState> {
   constructor() {
     super();
     this.state = {
@@ -27,22 +30,23 @@ export class Main extends React.Component<any, any> {
     this.deleteTask = this.deleteTask.bind(this);
   }
   fetchTasks(): void {
-    fetch('/tasks').then( (response) => response.json()).then( (body) => {
-      this.setState({ tasks: body });
+    fetch('/tasks').then( (response) => response.json()).then( (body: any) => {
+      const tasks: Array<ITask> = body;
+      this.setState({ tasks } as IMainState);
     });
   }
   toggleComplete(task): void {
-    const taskList = this.state.tasks;
-    const taskIndex = taskList.findIndex( (taskItem) => taskItem === task);
-    const stateTask = taskList[taskIndex];
+    const tasks = this.state.tasks;
+    const taskIndex: number = tasks.findIndex( (taskItem) => taskItem === task);
+    const stateTask: ITask = tasks[taskIndex];
     stateTask.isComplete = !stateTask.isComplete;
-    this.setState({ tasks: taskList });
+    this.setState({ tasks } as IMainState);
     fetch(`/task/${task._id}/toggle`, { method: 'put' }).then( (response) => {
       if (response.status !== 200) {
         // On Error, revert the task back to original state
         console.log(response);
         stateTask.isComplete = !stateTask.isComplete;
-        this.setState({ tasks: taskList });
+        this.setState({ tasks } as IMainState);
       }
     });
   }
@@ -50,19 +54,19 @@ export class Main extends React.Component<any, any> {
     event.preventDefault();
     let newTask = this.state.newTask;
     if (newTask.title.length > 0) {
-      let resetTask = { title: '', isComplete: false };
-      let tasks = this.state.tasks;
-      let newId = Math.floor(Math.random() * 10) + 2;
+      let resetTask: ITask = { title: '', isComplete: false };
+      let tasks: Array<ITask> = this.state.tasks;
+      let newId: number = Math.floor(Math.random() * 10) + 2;
       newTask._id = newId;
       tasks.push(newTask);
-      this.setState({ newTask: resetTask, tasks });
+      this.setState({ newTask: resetTask, tasks } as IMainState);
       let postBody = JSON.stringify({ title: newTask.title });
       fetch('/task', { method: 'post', headers: {'Content-Type': 'application/json'}, body: postBody })
       .then( (response) => response.json())
-      .then( (body) => {
+      .then( (body: any) => {
         let taskIndex = this.state.tasks.findIndex( (task) => task._id === newId );
         tasks.splice(taskIndex, 1, body);
-        this.setState({ tasks });
+        this.setState({ tasks } as IMainState);
       });
     }
   }
@@ -71,9 +75,9 @@ export class Main extends React.Component<any, any> {
   }
   updateNewTaskTitle(event): void {
     const newTitle = event.target.value;
-    const newTask = this.state.newTask;
+    const newTask: ITask = this.state.newTask;
     newTask.title = newTitle;
-    this.setState({ newTask });
+    this.setState({ newTask } as IMainState);
   }
   componentDidMount(): void {
     this.fetchTasks();

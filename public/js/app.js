@@ -110,7 +110,8 @@
 	            fetch('/tasks').then(function (response) {
 	                return response.json();
 	            }).then(function (body) {
-	                _this2.setState({ tasks: body });
+	                var tasks = body;
+	                _this2.setState({ tasks: tasks });
 	            });
 	        }
 	    }, {
@@ -118,18 +119,18 @@
 	        value: function toggleComplete(task) {
 	            var _this3 = this;
 	
-	            var taskList = this.state.tasks;
-	            var taskIndex = taskList.findIndex(function (taskItem) {
+	            var tasks = this.state.tasks;
+	            var taskIndex = tasks.findIndex(function (taskItem) {
 	                return taskItem === task;
 	            });
-	            var stateTask = taskList[taskIndex];
+	            var stateTask = tasks[taskIndex];
 	            stateTask.isComplete = !stateTask.isComplete;
-	            this.setState({ tasks: taskList });
+	            this.setState({ tasks: tasks });
 	            fetch('/task/' + task._id + '/toggle', { method: 'put' }).then(function (response) {
 	                if (response.status !== 200) {
 	                    console.log(response);
 	                    stateTask.isComplete = !stateTask.isComplete;
-	                    _this3.setState({ tasks: taskList });
+	                    _this3.setState({ tasks: tasks });
 	                }
 	            });
 	        }
