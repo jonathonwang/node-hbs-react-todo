@@ -82,7 +82,7 @@ export class Main extends React.Component<void, IMainState> {
   componentDidMount() {
     this.fetchTasks();
   }
-  render(): any {
+  render() {
     const taskList = this.state.tasks.map( (task) => {
       return <TaskComponent task={task} key={task._id} toggleComplete={this.toggleComplete} deleteTask={this.deleteTask}></TaskComponent>;
     });

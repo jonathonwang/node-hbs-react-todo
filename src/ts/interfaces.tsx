@@ -8,18 +8,12 @@ export interface IMainState {
   title: string;
   newTask: ITask;
   tasks: Array<ITask>;
-  // fetchTasks(): void;
-  // toggleComplete(task: ITask): void;
-  // createTask(event: Event): void;
-  // deleteTask(task: ITask): void;
-  // updateNewTaskTitle(event: Event): void;
-  // componentDidMount(): void;
 }
 
 export interface IInputFormProps {
   newTask: ITask;
-  createTask();
-  updateNewTaskTitle();
+  createTask(event: any): void;
+  updateNewTaskTitle(event: any): void;
   constructor();
 }
 
