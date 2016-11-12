@@ -9,3 +9,15 @@ export interface IMainState extends Object {
   newTask: ITask;
   tasks: Array<ITask>;
 }
+
+export interface IInputFormProps extends Object {
+  newTask: ITask;
+  createTask(): void;
+  updateNewTaskTitle(): void;
+}
+
+export interface ITaskComponentProps extends Object {
+  task: ITask;
+  deleteTask(): void;
+  toggleComplete(): void;
+}

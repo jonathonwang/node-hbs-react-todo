@@ -1,5 +1,8 @@
 import * as React from 'react';
-export class InputForm extends React.Component<any, void> {
+
+import { IInputFormProps } from './interfaces';
+
+export class InputForm extends React.Component<IInputFormProps, void> {
   constructor(props) {
     super();
   }
