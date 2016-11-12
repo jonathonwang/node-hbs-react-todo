@@ -63,6 +63,14 @@
 	
 	var ReactDOM = _interopRequireWildcard(_reactDom);
 	
+	var _State = __webpack_require__(184);
+	
+	var _State2 = _interopRequireDefault(_State);
+	
+	var _TaskApi = __webpack_require__(186);
+	
+	var _TaskApi2 = _interopRequireDefault(_TaskApi);
+	
 	var _TaskComponent = __webpack_require__(182);
 	
 	var _TaskComponent2 = _interopRequireDefault(_TaskComponent);
@@ -89,11 +97,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this));
 	
-	        _this.state = {
-	            title: 'Todo',
-	            newTask: { title: '', isComplete: false },
-	            tasks: []
-	        };
+	        _this.state = _State2.default;
 	        _this.fetchTasks = _this.fetchTasks.bind(_this);
 	        _this.toggleComplete = _this.toggleComplete.bind(_this);
 	        _this.createTask = _this.createTask.bind(_this);
@@ -107,9 +111,7 @@
 	        value: function fetchTasks() {
 	            var _this2 = this;
 	
-	            fetch('/tasks').then(function (response) {
-	                return response.json();
-	            }).then(function (body) {
+	            _TaskApi2.default.retrieveTasks(function (body) {
 	                var tasks = body;
 	                _this2.setState({ tasks: tasks });
 	            });
@@ -126,12 +128,10 @@
 	            var stateTask = tasks[taskIndex];
 	            stateTask.isComplete = !stateTask.isComplete;
 	            this.setState({ tasks: tasks });
-	            fetch('/task/' + task._id + '/toggle', { method: 'put' }).then(function (response) {
-	                if (response.status !== 200) {
-	                    console.log(response);
-	                    stateTask.isComplete = !stateTask.isComplete;
-	                    _this3.setState({ tasks: tasks });
-	                }
+	            _TaskApi2.default.toggleComplete(task, function (response) {
+	                console.log(response);
+	                stateTask.isComplete = !stateTask.isComplete;
+	                _this3.setState({ tasks: tasks });
 	            });
 	        }
 	    }, {
@@ -150,9 +150,7 @@
 	                    tasks.push(newTask);
 	                    _this4.setState({ newTask: resetTask, tasks: tasks });
 	                    var postBody = JSON.stringify({ title: newTask.title });
-	                    fetch('/task', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: postBody }).then(function (response) {
-	                        return response.json();
-	                    }).then(function (body) {
+	                    _TaskApi2.default.createTask(postBody, function (body) {
 	                        var taskIndex = _this4.state.tasks.findIndex(function (task) {
 	                            return task._id === newId;
 	                        });
@@ -165,7 +163,15 @@
 	    }, {
 	        key: 'deleteTask',
 	        value: function deleteTask(task) {
-	            console.log(task);
+	            var tasks = this.state.tasks;
+	            var taskIndex = tasks.findIndex(function (taskItem) {
+	                return taskItem._id === task._id;
+	            });
+	            tasks.splice(taskIndex, 1);
+	            this.setState({ tasks: tasks });
+	            _TaskApi2.default.deleteTask(task, function (body) {
+	                console.log(body);
+	            });
 	        }
 	    }, {
 	        key: 'updateNewTaskTitle',
@@ -22907,6 +22913,67 @@
 	}(React.Component);
 	
 	exports.default = InputForm;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var State = exports.State = {
+	    title: 'Todo',
+	    newTask: { title: '', isComplete: false },
+	    tasks: []
+	};
+	exports.default = State;
+
+/***/ },
+/* 185 */,
+/* 186 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var retrieveTasks = exports.retrieveTasks = function retrieveTasks(callback) {
+	    fetch('/tasks').then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	var toggleComplete = exports.toggleComplete = function toggleComplete(task, callback) {
+	    fetch('/task/' + task._id + '/toggle', { method: 'put' }).then(function (response) {
+	        if (response.status !== 200) {
+	            callback(response);
+	        }
+	    });
+	};
+	var createTask = exports.createTask = function createTask(postBody, callback) {
+	    fetch('/task', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: postBody }).then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	var deleteTask = exports.deleteTask = function deleteTask(task, callback) {
+	    fetch('/task/' + task._id, { method: 'delete' }).then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	exports.default = {
+	    retrieveTasks: retrieveTasks,
+	    toggleComplete: toggleComplete,
+	    createTask: createTask,
+	    deleteTask: deleteTask
+	};
 
 /***/ }
 /******/ ]);

@@ -52,5 +52,13 @@ router.put('/task/:id/toggle', (req, res, next) => {
     });
   });
 });
+// Delete Task
+router.delete('/task/:id', (req, res, next) => {
+  Task.find({ _id: req.params.id }, (err, tasks) => {
+    if (err) throw err;
+    console.log(tasks);
+    tasks[0].remove();
+  });
+});
 
 module.exports = router;

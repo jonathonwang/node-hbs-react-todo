@@ -6,7 +6,12 @@ import '../scss/app.scss';
 // NPM Module Dependency Imports
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as Fetch from 'whatwg-fetch';
+
+// State Import
+import State from './State';
+
+// Api Methods Import
+import TaskApi from './Api/TaskApi';
 
 // React Components
 import TaskComponent from './TaskComponent';
@@ -18,11 +23,7 @@ import { IMainState, ITask } from './interfaces';
 export class Main extends React.Component<void, IMainState> {
   constructor() {
     super();
-    this.state = {
-      title: 'Todo',
-      newTask: { title: '', isComplete: false },
-      tasks: []
-    };
+    this.state = State;
     this.fetchTasks = this.fetchTasks.bind(this);
     this.toggleComplete = this.toggleComplete.bind(this);
     this.createTask = this.createTask.bind(this);
@@ -30,7 +31,8 @@ export class Main extends React.Component<void, IMainState> {
     this.deleteTask = this.deleteTask.bind(this);
   }
   fetchTasks(): void {
-    fetch('/tasks').then( (response) => response.json()).then( (body: any) => {
+    // API Call
+    TaskApi.retrieveTasks( (body) => {
       const tasks: Array<ITask> = body;
       this.setState({ tasks } as IMainState);
     });
@@ -41,13 +43,12 @@ export class Main extends React.Component<void, IMainState> {
     const stateTask: ITask = tasks[taskIndex];
     stateTask.isComplete = !stateTask.isComplete;
     this.setState({ tasks } as IMainState);
-    fetch(`/task/${task._id}/toggle`, { method: 'put' }).then( (response) => {
-      if (response.status !== 200) {
-        // On Error, revert the task back to original state
-        console.log(response);
-        stateTask.isComplete = !stateTask.isComplete;
-        this.setState({ tasks } as IMainState);
-      }
+    // API Call
+    TaskApi.toggleComplete( task, (response) =>  {
+      // On Error, revert the task back to original state
+      console.log(response);
+      stateTask.isComplete = !stateTask.isComplete;
+      this.setState({ tasks } as IMainState);
     });
   }
   createTask(event): void {
@@ -61,9 +62,8 @@ export class Main extends React.Component<void, IMainState> {
       tasks.push(newTask);
       this.setState({ newTask: resetTask, tasks } as IMainState);
       let postBody = JSON.stringify({ title: newTask.title });
-      fetch('/task', { method: 'post', headers: {'Content-Type': 'application/json'}, body: postBody })
-      .then( (response) => response.json())
-      .then( (body: any) => {
+      // API Call
+      TaskApi.createTask(postBody, (body) => {
         let taskIndex = this.state.tasks.findIndex( (task) => task._id === newId );
         tasks.splice(taskIndex, 1, body);
         this.setState({ tasks } as IMainState);
@@ -71,7 +71,13 @@ export class Main extends React.Component<void, IMainState> {
     }
   }
   deleteTask(task) {
-    console.log(task);
+    const tasks: Array<ITask> = this.state.tasks;
+    const taskIndex: number = tasks.findIndex( (taskItem) => taskItem._id === task._id);
+    tasks.splice(taskIndex, 1);
+    this.setState({ tasks } as IMainState);
+    TaskApi.deleteTask(task, (body) => {
+      console.log(body);
+    });
   }
   updateNewTaskTitle(event) {
     const newTitle = event.target.value;
