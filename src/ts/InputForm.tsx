@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IInputFormProps } from './interfaces';
 
 export class InputForm extends React.Component<IInputFormProps, void> {
-  constructor(props) {
+  constructor() {
     super();
   }
   render(): any {

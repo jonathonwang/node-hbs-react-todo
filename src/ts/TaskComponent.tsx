@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { ITaskComponentProps } from './interfaces';
 
-export class TaskComponent extends React.Component<any, void> {
-  constructor(props) {
+export class TaskComponent extends React.Component<ITaskComponentProps, void> {
+  constructor() {
     super();
   }
   render(): any {

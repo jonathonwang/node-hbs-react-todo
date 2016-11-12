@@ -73,13 +73,13 @@ export class Main extends React.Component<void, IMainState> {
   deleteTask(task) {
     console.log(task);
   }
-  updateNewTaskTitle(event): void {
+  updateNewTaskTitle(event) {
     const newTitle = event.target.value;
     const newTask: ITask = this.state.newTask;
     newTask.title = newTitle;
     this.setState({ newTask } as IMainState);
   }
-  componentDidMount(): void {
+  componentDidMount() {
     this.fetchTasks();
   }
   render(): any {

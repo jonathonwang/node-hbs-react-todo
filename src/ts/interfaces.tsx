@@ -1,23 +1,30 @@
-export interface ITask extends Object {
+export interface ITask {
   title: string;
   isComplete: boolean;
   _id?: string | number;
 }
 
-export interface IMainState extends Object {
+export interface IMainState {
   title: string;
   newTask: ITask;
   tasks: Array<ITask>;
+  // fetchTasks(): void;
+  // toggleComplete(task: ITask): void;
+  // createTask(event: Event): void;
+  // deleteTask(task: ITask): void;
+  // updateNewTaskTitle(event: Event): void;
+  // componentDidMount(): void;
 }
 
-export interface IInputFormProps extends Object {
+export interface IInputFormProps {
   newTask: ITask;
-  createTask(): void;
-  updateNewTaskTitle(): void;
+  createTask();
+  updateNewTaskTitle();
+  constructor();
 }
 
-export interface ITaskComponentProps extends Object {
+export interface ITaskComponentProps {
   task: ITask;
-  deleteTask(): void;
-  toggleComplete(): void;
+  deleteTask(task: ITask);
+  toggleComplete(task: ITask);
 }
