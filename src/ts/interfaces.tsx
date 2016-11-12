@@ -14,7 +14,6 @@ export interface IInputFormProps {
   newTask: ITask;
   createTask(event: any): void;
   updateNewTaskTitle(event: any): void;
-  constructor();
 }
 
 export interface ITaskComponentProps {
