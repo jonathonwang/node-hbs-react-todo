@@ -75,6 +75,7 @@ export class Main extends React.Component<void, IMainState> {
     const taskIndex: number = tasks.findIndex( (taskItem) => taskItem._id === task._id);
     tasks.splice(taskIndex, 1);
     this.setState({ tasks } as IMainState);
+    // API Call
     TaskApi.deleteTask(task, (body) => {
       console.log(body);
     });
@@ -89,9 +90,18 @@ export class Main extends React.Component<void, IMainState> {
     this.fetchTasks();
   }
   render() {
+    const completedTasks: Array<ITask> = this.state.tasks.filter((task) => task.isComplete === true);
+    const incompleteTasks: Array<ITask> = this.state.tasks.filter((task) => task.isComplete === false);
     const taskList = this.state.tasks.map( (task) => {
       return <TaskComponent task={task} key={task._id} toggleComplete={this.toggleComplete} deleteTask={this.deleteTask}></TaskComponent>;
     });
+    const toolBar = () => {
+      return (
+        <li className='list-group-item'>
+          <span className='label label-primary'></span>
+        </li>
+      );
+    };
     return (
       <div>
         <h1 className='text-center'>{this.state.title}</h1>

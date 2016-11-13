@@ -191,9 +191,18 @@
 	        value: function render() {
 	            var _this5 = this;
 	
+	            var completedTasks = this.state.tasks.filter(function (task) {
+	                return task.isComplete === true;
+	            });
+	            var incompleteTasks = this.state.tasks.filter(function (task) {
+	                return task.isComplete === false;
+	            });
 	            var taskList = this.state.tasks.map(function (task) {
 	                return React.createElement(_TaskComponent2.default, { task: task, key: task._id, toggleComplete: _this5.toggleComplete, deleteTask: _this5.deleteTask });
 	            });
+	            var toolBar = function toolBar() {
+	                return React.createElement("li", { className: 'list-group-item' }, React.createElement("span", { className: 'label label-primary' }));
+	            };
 	            return React.createElement("div", null, React.createElement("h1", { className: 'text-center' }, this.state.title), React.createElement("ul", { className: 'list-group' }, React.createElement(_InputForm2.default, { newTask: this.state.newTask, createTask: this.createTask, updateNewTaskTitle: this.updateNewTaskTitle }), taskList));
 	        }
 	    }]);
