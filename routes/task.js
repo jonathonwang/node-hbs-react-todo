@@ -93,4 +93,18 @@ router.delete('/task/:id', (req, res, next) => {
   });
 });
 
+// Delete All Completed Tasks
+router.delete('/tasks/completed', (req, res, next) => {
+  Task.find({isComplete: true}), (err, tasks) => {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      tasks.map( (taskItem) => {
+        taskItem.remove();
+      })
+    }
+  }
+});
+
 module.exports = router;

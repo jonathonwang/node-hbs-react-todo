@@ -63,19 +63,19 @@
 	
 	var ReactDOM = _interopRequireWildcard(_reactDom);
 	
-	var _State = __webpack_require__(184);
+	var _State = __webpack_require__(182);
 	
 	var _State2 = _interopRequireDefault(_State);
 	
-	var _TaskApi = __webpack_require__(186);
+	var _TaskApi = __webpack_require__(183);
 	
 	var _TaskApi2 = _interopRequireDefault(_TaskApi);
 	
-	var _TaskComponent = __webpack_require__(182);
+	var _TaskComponent = __webpack_require__(184);
 	
 	var _TaskComponent2 = _interopRequireDefault(_TaskComponent);
 	
-	var _InputForm = __webpack_require__(183);
+	var _InputForm = __webpack_require__(185);
 	
 	var _InputForm2 = _interopRequireDefault(_InputForm);
 	
@@ -103,6 +103,7 @@
 	        _this.createTask = _this.createTask.bind(_this);
 	        _this.updateNewTaskTitle = _this.updateNewTaskTitle.bind(_this);
 	        _this.deleteTask = _this.deleteTask.bind(_this);
+	        _this.deleteCompletedTasks = _this.deleteCompletedTasks.bind(_this);
 	        return _this;
 	    }
 	
@@ -182,6 +183,17 @@
 	            this.setState({ newTask: newTask });
 	        }
 	    }, {
+	        key: 'deleteCompletedTasks',
+	        value: function deleteCompletedTasks() {
+	            var tasks = this.state.tasks.filter(function (taskItem) {
+	                return taskItem.isComplete === false;
+	            });
+	            this.setState({ tasks: tasks });
+	            _TaskApi2.default.deleteCompletedTasks(function (body) {
+	                console.log(body);
+	            });
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            this.fetchTasks();
@@ -197,13 +209,15 @@
 	            var incompleteTasks = this.state.tasks.filter(function (task) {
 	                return task.isComplete === false;
 	            });
-	            var taskList = this.state.tasks.map(function (task) {
+	            var completedTaskList = completedTasks.map(function (task) {
 	                return React.createElement(_TaskComponent2.default, { task: task, key: task._id, toggleComplete: _this5.toggleComplete, deleteTask: _this5.deleteTask });
 	            });
-	            var toolBar = function toolBar() {
-	                return React.createElement("li", { className: 'list-group-item' }, React.createElement("span", { className: 'label label-primary' }));
-	            };
-	            return React.createElement("div", null, React.createElement("h1", { className: 'text-center' }, this.state.title), React.createElement("ul", { className: 'list-group' }, React.createElement(_InputForm2.default, { newTask: this.state.newTask, createTask: this.createTask, updateNewTaskTitle: this.updateNewTaskTitle }), taskList));
+	            var incompleteTaskList = incompleteTasks.map(function (task) {
+	                return React.createElement(_TaskComponent2.default, { task: task, key: task._id, toggleComplete: _this5.toggleComplete, deleteTask: _this5.deleteTask });
+	            });
+	            var toolBar = React.createElement("li", { className: 'list-group-item' }, React.createElement("span", { className: 'label label-primary' }, "Completed Tasks: ", completedTasks.length), React.createElement("span", { className: 'label label-danger pull-right' }, "Incomplete Tasks: ", incompleteTasks.length));
+	            var removeCompleteBtn = React.createElement("li", { className: 'list-group-item' }, React.createElement("button", { className: 'btn btn-lg btn-block btn-default', onClick: this.deleteCompletedTasks }, "Delete Completed Tasks"));
+	            return React.createElement("div", null, React.createElement("h1", { className: 'text-center' }, this.state.title), React.createElement("ul", { className: 'list-group' }, React.createElement(_InputForm2.default, { newTask: this.state.newTask, createTask: this.createTask, updateNewTaskTitle: this.updateNewTaskTitle }), incompleteTaskList, completedTaskList, completedTaskList.length > 0 || incompleteTaskList.length > 0 ? toolBar : '', completedTaskList.length > 0 ? removeCompleteBtn : ''));
 	        }
 	    }]);
 	
@@ -22825,6 +22839,74 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var State = exports.State = {
+	    title: 'Todo',
+	    newTask: { title: '', isComplete: false },
+	    tasks: []
+	};
+	exports.default = State;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var retrieveTasks = exports.retrieveTasks = function retrieveTasks(callback) {
+	    fetch('/tasks').then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	var toggleComplete = exports.toggleComplete = function toggleComplete(task, callback) {
+	    fetch('/task/' + task._id + '/toggle', { method: 'put' }).then(function (response) {
+	        if (response.status !== 200) {
+	            callback(response);
+	        }
+	    });
+	};
+	var createTask = exports.createTask = function createTask(postBody, callback) {
+	    fetch('/task', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: postBody }).then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	var deleteTask = exports.deleteTask = function deleteTask(task, callback) {
+	    fetch('/task/' + task._id, { method: 'delete' }).then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	var deleteCompletedTasks = exports.deleteCompletedTasks = function deleteCompletedTasks(callback) {
+	    fetch('/tasks/completed', { method: 'delete' }).then(function (response) {
+	        return response.json();
+	    }).then(function (body) {
+	        callback(body);
+	    });
+	};
+	exports.default = {
+	    retrieveTasks: retrieveTasks,
+	    toggleComplete: toggleComplete,
+	    createTask: createTask,
+	    deleteTask: deleteTask,
+	    deleteCompletedTasks: deleteCompletedTasks
+	};
+
+/***/ },
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22878,7 +22960,7 @@
 	exports.default = TaskComponent;
 
 /***/ },
-/* 183 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22922,67 +23004,6 @@
 	}(React.Component);
 	
 	exports.default = InputForm;
-
-/***/ },
-/* 184 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var State = exports.State = {
-	    title: 'Todo',
-	    newTask: { title: '', isComplete: false },
-	    tasks: []
-	};
-	exports.default = State;
-
-/***/ },
-/* 185 */,
-/* 186 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var retrieveTasks = exports.retrieveTasks = function retrieveTasks(callback) {
-	    fetch('/tasks').then(function (response) {
-	        return response.json();
-	    }).then(function (body) {
-	        callback(body);
-	    });
-	};
-	var toggleComplete = exports.toggleComplete = function toggleComplete(task, callback) {
-	    fetch('/task/' + task._id + '/toggle', { method: 'put' }).then(function (response) {
-	        if (response.status !== 200) {
-	            callback(response);
-	        }
-	    });
-	};
-	var createTask = exports.createTask = function createTask(postBody, callback) {
-	    fetch('/task', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: postBody }).then(function (response) {
-	        return response.json();
-	    }).then(function (body) {
-	        callback(body);
-	    });
-	};
-	var deleteTask = exports.deleteTask = function deleteTask(task, callback) {
-	    fetch('/task/' + task._id, { method: 'delete' }).then(function (response) {
-	        return response.json();
-	    }).then(function (body) {
-	        callback(body);
-	    });
-	};
-	exports.default = {
-	    retrieveTasks: retrieveTasks,
-	    toggleComplete: toggleComplete,
-	    createTask: createTask,
-	    deleteTask: deleteTask
-	};
 
 /***/ }
 /******/ ]);

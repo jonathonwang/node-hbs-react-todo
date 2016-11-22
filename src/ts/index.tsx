@@ -29,6 +29,7 @@ export class Main extends React.Component<void, IMainState> {
     this.createTask = this.createTask.bind(this);
     this.updateNewTaskTitle = this.updateNewTaskTitle.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
+    this.deleteCompletedTasks = this.deleteCompletedTasks.bind(this);
   }
   fetchTasks(): void {
     // API Call
@@ -86,28 +87,48 @@ export class Main extends React.Component<void, IMainState> {
     newTask.title = newTitle;
     this.setState({ newTask } as IMainState);
   }
+  deleteCompletedTasks() {
+    const tasks: Array<ITask> = this.state.tasks.filter((taskItem) => taskItem.isComplete === false);
+    this.setState({ tasks } as IMainState);
+    // API Call
+    TaskApi.deleteCompletedTasks( (body: any) => {
+      console.log(body);
+    });
+  }
   componentDidMount() {
     this.fetchTasks();
   }
   render() {
     const completedTasks: Array<ITask> = this.state.tasks.filter((task) => task.isComplete === true);
     const incompleteTasks: Array<ITask> = this.state.tasks.filter((task) => task.isComplete === false);
-    const taskList = this.state.tasks.map( (task) => {
+    const completedTaskList = completedTasks.map( (task) => {
       return <TaskComponent task={task} key={task._id} toggleComplete={this.toggleComplete} deleteTask={this.deleteTask}></TaskComponent>;
     });
-    const toolBar = () => {
-      return (
-        <li className='list-group-item'>
-          <span className='label label-primary'></span>
-        </li>
-      );
-    };
+    const incompleteTaskList = incompleteTasks.map( (task) => {
+      return <TaskComponent task={task} key={task._id} toggleComplete={this.toggleComplete} deleteTask={this.deleteTask}></TaskComponent>;
+    });
+    const toolBar = (
+      <li className='list-group-item'>
+        <span className='label label-primary'>Completed Tasks: {completedTasks.length}</span>
+        <span className='label label-danger pull-right'>Incomplete Tasks: {incompleteTasks.length}</span>
+      </li>
+    );
+    const removeCompleteBtn = (
+      <li className='list-group-item'>
+        <button className='btn btn-lg btn-block btn-default' onClick={this.deleteCompletedTasks}>
+          Delete Completed Tasks
+        </button>
+      </li>
+    );
     return (
       <div>
         <h1 className='text-center'>{this.state.title}</h1>
         <ul className='list-group'>
           <InputForm newTask={this.state.newTask} createTask={this.createTask} updateNewTaskTitle={this.updateNewTaskTitle}></InputForm>
-          {taskList}
+          {incompleteTaskList}
+          {completedTaskList}
+          {completedTaskList.length > 0 || incompleteTaskList.length > 0 ? toolBar : ''}
+          {completedTaskList.length > 0 ? removeCompleteBtn : ''}
         </ul>
       </div>
     );

@@ -5817,14 +5817,15 @@ button.close {
 input[type="checkbox"] {
   margin-right: 20px; }
 
-.list-group-item.completed {
-  background-color: #eee; }
-
-.list-group-item .btn-danger {
-  opacity: 0;
-  transition: .25s ease all; }
-
-.list-group-item:hover .btn-danger {
-  opacity: 1; }
+.list-group-item {
+  font-weight: 500; }
+  .list-group-item.completed {
+    background-color: #eee;
+    text-decoration: line-through; }
+  .list-group-item .btn-danger {
+    opacity: 0;
+    transition: .25s ease all; }
+  .list-group-item:hover .btn-danger {
+    opacity: 1; }
 
 /*# sourceMappingURL=app.css.map*/

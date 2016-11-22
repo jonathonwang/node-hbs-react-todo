@@ -5,8 +5,10 @@ input[type="checkbox"] {
   margin-right: 20px;
 }
 .list-group-item {
+  font-weight: 500;
   &.completed {
     background-color: #eee;
+    text-decoration: line-through;
   }
   .btn-danger {
     opacity: 0;

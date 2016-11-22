@@ -34,9 +34,18 @@ export const deleteTask = (task: ITask, callback: Function) => {
   });
 };
 
+export const deleteCompletedTasks = (callback: Function) => {
+  fetch('/tasks/completed', { method: 'delete' })
+  .then( (response) => response.json() )
+  .then( (body: any) => {
+    callback(body);
+  });
+};
+
 export default {
   retrieveTasks,
   toggleComplete,
   createTask,
-  deleteTask
+  deleteTask,
+  deleteCompletedTasks,
 };
